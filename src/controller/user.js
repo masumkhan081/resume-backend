@@ -3,9 +3,9 @@ const tokenSecret = process.env.TOKEN_SECRET;
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const CryptoJS = require("crypto-js");
-const { sendOTPMail } = require("./email");
+const { sendOTPMail } = require("../util/mail");
 const tokenHeaderKey = process.env.HEADER_KEY;
-const userModel = require("../model/user");
+const userModel = require("../model");
 
 function logout(res) {
   res.clearCookie(tokenHeaderKey);

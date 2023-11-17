@@ -1,10 +1,11 @@
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const CryptoJS = require("crypto-js");
+const jwt = require("jsonwebtoken");
 const tokenSecret = process.env.TOKEN_SECRET;
 
 //  send otp to user email for email verification
-const sendOTPMail = ({ user, res }) => {
+const sendOTPMail = ({ user, res, successMessage }) => {
   //
   const generatedOTP = generateOTP();
   //
@@ -21,8 +22,8 @@ const sendOTPMail = ({ user, res }) => {
     .then((result) => {
       result.accepted.includes(user.email)
         ? res.status(201).send({
-            message: "An OTP has been sent to your email for verification.",
-            token: getOtpToken(generatedOTP),
+            message: successMessage,
+            token: getOtpToken({ otp: generatedOTP, email: user.email }),
           })
         : res.status(400).send({ message: "Error sendign otp to the mail" });
     })
@@ -45,9 +46,8 @@ async function sendResetMail({ user, res }) {
   transporter
     .sendMail(mailOptions)
     .then((result) => {
-      console.log(`reset link sent: : ${result.messageId}`);
       result
-        ? res.send(JSON.stringify(result))
+        ? res.status(400).json("A recovery mail has been sent ")
         : res
             .status(400)
             .send({ message: "Error sendign password reset mail" });
@@ -71,17 +71,10 @@ const getVerificationMessage = (otp) =>
   `<h4 style="color:blue;text-align:center;">Please copy or type the OTP provided below: <br><br>${otp}`;
 
 function getResetLink(user) {
-  return (
-    `<h4 style="color:blue;text-align:center;">Please click the link to reset your password: </h4><br><br>${process.env.BASE_URL}/auth/recovery/` +
-    `${CryptoJS.AES.encrypt(
-      JSON.stringify({
-        id: user.id,
-        email: user.email,
-        expireAt: new Date().getTime() + 15 * 60000,
-      }),
-      tokenSecret
-    ).toString()}`
-  );
+  return `<h4 style="color:blue;text-align:center;">Please click the link to reset your password: </h4><br><br>${
+    process.env.BASE_URL
+  }/auth/recovery/${jwt.sign(
+    { id:user.id, email: user.email, expireAt: new Date().getTime() + 5 * 60000 },tokenSecret )}`;
 }
 
 // return a relatable email sibject based on purpose of the mail
@@ -116,17 +109,17 @@ const getTransporter = () =>
   });
 
 //  create and return a encrypted token holding data: otp and expiration time for it
-const getOtpToken = (otp) =>
+const getOtpToken = ({ otp, email }) =>
   CryptoJS.AES.encrypt(
     JSON.stringify({
+      email,
       otp,
       expireAt: new Date().getTime() + 5 * 60000,
     }),
     tokenSecret
-  ).toString();
+  ).toString(); 
 
 module.exports = {
   sendResetMail,
   sendOTPMail,
 };
-

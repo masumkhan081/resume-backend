@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 const initDB = require("./src/data-tier/mongodb");
+const { originControl } = require("./src/middleware/middlewares");
 
 // initialize the database
 initDB();
@@ -13,30 +14,24 @@ initDB();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ origin: "https://auth-full.vercel.app", credentials: true }));
+app.use(originControl);
 //
 
-// routes
-app.use("/auth", require("./src/routes/auth"));
-app.use("/formulations", require("./src/routes/formulation"));
-app.use("/units", require("./src/routes/unit.js"));
-app.use("/groups", require("./src/routes/group"));
-app.use("/generics", require("./src/routes/generic"));
-app.use("/brands", require("./src/routes/brand"));
-app.use("/manufacturers", require("./src/routes/manufacturer"));
-app.use("/drugs", require("./src/routes/drug"));
-app.use("/sale", require("./src/routes/sale"));
-app.use("/purchase", require("./src/routes/purchase"));
+
+app.use("/contact-and-skill", require("./src/route/contact.and.skill"));
+app.use(
+  "/education-and-experience",
+  require("./src/route/education.and.experiences")
+);
+app.use(
+  "/project-and-development",
+  require("./src/route/project.and.development")
+);
+
+// routes: login, register, recover, reset, verify, logout ...
+app.use("/auth", require("./src/route/auth"));
 
 app.listen(3000, () => {
   console.log("running ...");
-});
-
-// // close the server
-app.get("/quit", function (req, res) {
-  res.send("closed");
-});
-// server closing endpoint; no need what so ever
-app.get("/", (req, res) => {
-  res.send(`<a href="/quit">quit drugs.info or whatever !</a>`);
 });
