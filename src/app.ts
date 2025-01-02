@@ -23,12 +23,12 @@ import unitRoutes from "./routes/unit.route";
 // import saleRoutes from "./src/routes/sale";
 
 //
-const publicDir = path.join(__dirname, "public");
+// const publicDir = path.join(__dirname, "public");
 // just to ensure the public folder exists or create it, as after git push empty folder doesn't get pushed
-if (!fs.existsSync(publicDir)) {
-  fs.mkdirSync(publicDir, { recursive: true });
-  console.log("Public folder created.");
-}
+// if (!fs.existsSync(publicDir)) {
+//   fs.mkdirSync(publicDir, { recursive: true });
+//   console.log("Public folder created.");
+// }
 
 // Configure Winston logger
 const logger = winston.createLogger({
