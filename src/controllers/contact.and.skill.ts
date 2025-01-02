@@ -1,9 +1,9 @@
 
-const { BasicInfoAndSkill } = require("../model");
-const obj = require("../data-tier/settings");
+import { BasicInfoAndSkill } from "../models/index";
+import obj from "../data-tier/settings";
 // 
 
-async function getData(req, res, searchObj = { name: "" }) {
+export async function getData(req, res, searchObj = { name: "" }) {
 
    let msg = searchObj.name ? `Searched for '${searchObj.name}'` : "plain--";
 
@@ -11,7 +11,7 @@ async function getData(req, res, searchObj = { name: "" }) {
       .then((data) => {
          res.status(200).send({
             data,
-            msg, 
+            msg,
          });
       })
       .catch((err) => {
@@ -19,11 +19,9 @@ async function getData(req, res, searchObj = { name: "" }) {
       });
 }
 
-async function updateData(req, res) {
+export async function updateData(req, res) {
    const { userId, name, title, phone, email, dob, linkedin, github, porfolio, frontEndSkills, dataTierSkills, backEndSkills, personalSkills } = req.body;
-   (await Formulation.findOneUpdate(userId, {  name, title, phone, email, dob, linkedin, github, porfolio, frontEndSkills, dataTierSkills, backEndSkills, personalSkills }))
+   (await Formulation.findOneUpdate(userId, { name, title, phone, email, dob, linkedin, github, porfolio, frontEndSkills, dataTierSkills, backEndSkills, personalSkills }))
       ? res.status(200).send({ message: "Updated successfully" })
       : res.status(400).send({ message: "Error in update" });
 }
-
-module.exports = { getData, updateData }

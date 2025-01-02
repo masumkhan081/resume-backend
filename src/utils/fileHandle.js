@@ -1,8 +1,8 @@
-const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
-const { entities } = require("../config/constants");
-const { promisify } = require("util");
+const multer from "multer");
+const fs from "fs");
+const path from "path");
+const { entities } from "../config/constants");
+const { promisify } from "util");
 const unlinkAsync = promisify(fs.unlink);
 const upload = multer({ dest: "../../public/" });
 //
@@ -90,7 +90,7 @@ async function removeFile({ fileUrl }) {
   }
 }
 //
-module.exports = {
+export default {
   storageMap,
   removeFile,
   uploadHandler,

@@ -3,7 +3,7 @@ dotenv.config();
 import nodemailer, { SendMailOptions, SentMessageInfo } from "nodemailer";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
-import config from "../../auction/src/config";
+import config from "../config";
 
 // Interface for OTP token parameters
 interface OtpTokenParams {

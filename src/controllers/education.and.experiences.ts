@@ -1,12 +1,12 @@
-const { InterestAndProject } = require("../models");
-const obj = require("../config/settings");
+import { EducationAndExperience } from "../models/index";
+import obj from "../config/settings";
 //
 
 async function getData(req, res, searchObj = { name: "" }) {
 
    let msg = searchObj.name ? `Searched for '${searchObj.name}'` : "plain--";
 
-   InterestAndProject.find()
+   EducationAndExperience.find()
       .then((data) => {
          res.status(200).send({
             data,
@@ -19,10 +19,10 @@ async function getData(req, res, searchObj = { name: "" }) {
 }
 
 async function updateData(req, res) {
-   const { userId, hobbies, interests, projects } = req.body;
-   (await InterestAndProject.findOneUpdate(userId, { hobbies, interests, projects }))
+   const { userId, educations, experiences } = req.body;
+   (await EducationAndExperience.findOneUpdate(userId, { educations, experiences }))
       ? res.status(200).send({ message: "Updated successfully" })
       : res.status(400).send({ message: "Error in update" });
 }
 
-module.exports = { getData, updateData }
+export default { getData, updateData }

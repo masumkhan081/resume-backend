@@ -1,11 +1,11 @@
 require("dotenv").config();
 const tokenSecret = process.env.TOKEN_SECRET;
-const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken");
-const CryptoJS = require("crypto-js");
-const { sendOTPMail } = require("../util/mail");
+import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
+import CryptoJS from "crypto-js";
+import { sendOTPMail } from "../util/mail";
 const tokenHeaderKey = process.env.HEADER_KEY;
-const userModel = require("../models");
+import userModel from "../models/user.model";
 
 function logout(res) {
   res.clearCookie(tokenHeaderKey);
@@ -97,7 +97,7 @@ async function updatePw({ email, password, res }) {
     : res.status(400).send({ message: "Error updating password" });
 }
 
-module.exports = {
+export default {
   signup,
   login,
   logout,

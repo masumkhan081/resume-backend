@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const User = mongoose.model(
@@ -153,7 +153,7 @@ const InterestAndProject = mongoose.model("interests.projects", interestAndProje
 // }, "Invalid URL.");
 
 //
-module.exports = {
+export default {
   User,
   BasicInfoAndSkill,
   EducationAndExperience,

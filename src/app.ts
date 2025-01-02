@@ -1,48 +1,40 @@
 
 import express, { Express, Request, Response } from "express";
 const app: Express = express();
-const morgan = require("morgan");
-const winston = require("winston");
-
+import morgan from "morgan";
+import fs from "fs";
+import winston from "winston";
 import dotenv from "dotenv";
 dotenv.config();
-
 import originControl from "./middlewares/corsMiddleware";
-// routes
-import unitRoutes from "./routes/unit.route";
+import path from "path";
+//  routes
+import authRoutes from "./routes/auth";
+import contactAndSkillRoutes from "./routes/contact.and.skill";
+import eduAndExpRoutes from "./routes/education.and.experiences";
+import projectAndDevRoutes from "./routes/project.and.development";
 
-// import formulationRoutes from "./src/routes/formulation";
-// import mfrRoutes from "./src/routes/mfr";
-// import genericRoutes from "./src/routes/generic";
-// import groupRoutes from "./src/routes/group";
-// import brandRoutes from "./src/routes/brand";
-// import drugRoutes from "./src/routes/drug";
-// import staffRoutes from "./src/routes/staff";
-// import salaryRoutes from "./src/routes/salary";
-// import purchaseRoutes from "./src/routes/purchase";
-// import saleRoutes from "./src/routes/sale";
 
-//
-// const publicDir = path.join(__dirname, "public");
+// 
+const publicDir = path.join(__dirname, "public");
 // just to ensure the public folder exists or create it, as after git push empty folder doesn't get pushed
-// if (!fs.existsSync(publicDir)) {
-//   fs.mkdirSync(publicDir, { recursive: true });
-//   console.log("Public folder created.");
-// }
+if (!fs.existsSync(publicDir)) {
+  fs.mkdirSync(publicDir, { recursive: true });
+  console.log("Public folder created.");
+}
 
 // Configure Winston logger
-const logger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: "combined.log" }),
-  ],
-});
-
+// const logger = winston.createLogger({
+//   level: "info",
+//   format: winston.format.combine(
+//     winston.format.timestamp(),
+//     winston.format.json()
+//   ),
+//   transports: [
+//     new winston.transports.Console(),
+//     new winston.transports.File({ filename: "combined.log" }),
+//   ],
+// });
 
 // need to organize how message format looks like
 // app.use(
@@ -68,30 +60,13 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 //
-app.use("/api/units", unitRoutes);
-app.use("/contact-and-skill", require("./src/route/contact.and.skill"));
+app.use("/api/auth", authRoutes);
+app.use("/api/contact-and-skill", contactAndSkillRoutes);
 app.use(
-  "/education-and-experience",
-  require("./src/route/education.and.experiences")
+  "/api/education-and-experience", eduAndExpRoutes
 );
 app.use(
-  "/project-and-development",
-  require("./src/route/project.and.development")
-);
-
-// routes: login, register, recover, reset, verify, logout ...
-app.use("/auth", require("./src/route/auth"));
-//
-// app.use("/api/formulations", formulationRoutes);
-// app.use("/api/mfrs", mfrRoutes);
-// app.use("/api/generics", genericRoutes);
-// app.use("/api/groups", groupRoutes);
-// app.use("/api/brands", brandRoutes);
-// app.use("/api/drugs", drugRoutes);
-// app.use("/api/staff", staffRoutes);
-// app.use("/api/salaries", salaryRoutes);
-// app.use("/api/purchases", purchaseRoutes);
-// app.use("/api/sales", saleRoutes);
+  "/api/project-and-development", projectAndDevRoutes);
 //
 app.use((req, res, next) => {
   res.status(404).json({

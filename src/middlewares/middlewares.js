@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import jwt from "jsonwebtoken"; import dotenv from "dotenv";
+dotenv.config();
 const tokenSecret = process.env.JWT_SECRET;
 const tokenHeaderKey = process.env.HEADER_KEY;
 
@@ -40,7 +40,7 @@ async function authorization(req, res, next) {
   }
 }
 
-module.exports = { originControl };
+export default { originControl };
 
 //  401 - invalid credentials
 //  403 - Forbidden - has valid credentials but not enough privileges

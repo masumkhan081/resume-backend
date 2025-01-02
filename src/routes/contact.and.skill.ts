@@ -1,7 +1,8 @@
-const router = require("express").Router();
-const {
+import express from "express";
+const router = express.Router();
+import {
  getData,updateData
-} = require("../controller/contact.and.skill");
+} from "../controllers/";
 //
 
 router.get("/", (req, res) => {
@@ -12,4 +13,5 @@ router.patch("/", (req, res) => {
   updateData(req, res);
 });
 
-module.exports = router;
+export default router;
+
