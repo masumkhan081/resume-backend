@@ -1,8 +1,8 @@
-import app from "./src/app";
+import app from "./app";
 import dotenv from "dotenv";
 dotenv.config();
-import initDB from "./src/config/mongodb";
-import config from "./src/config";
+import initDB from "./config/mongodb";
+import config from "./config";
 //
 async function bootstrap() {
   const server = app.listen(config.port, async () => {
